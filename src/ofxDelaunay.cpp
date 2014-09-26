@@ -87,8 +87,8 @@ int ofxDelaunay::triangulate(){
 }
 
 int ofxDelaunay::triangulate(vector<ofFloatColor> _fColors, float _width, float _height){
-    
 
+    triCenter.clear();
     
     if(vertices.size() < 3){
         return NULL;
@@ -142,7 +142,7 @@ int ofxDelaunay::triangulate(vector<ofFloatColor> _fColors, float _width, float 
         ofPoint point;
         point.x = vCenter.x;
         point.y = vCenter.y;
-        //triCenter.push_back(point);
+        triCenter.push_back(point);
         
         ofColor c = _fColors[v1.x + _width * v1.y];
         

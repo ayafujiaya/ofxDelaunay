@@ -39,6 +39,7 @@ private:
     vector<ITRIANGLE> triangles;
     vector<XYZ> vertices;
     vector<ofFloatColor> color;
+    vector<ofPoint> triCenter;
     
 };
 
