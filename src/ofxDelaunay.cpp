@@ -12,80 +12,34 @@
  *  Refactored for 0071 + ofMesh by James George on 21/06/2012
  */
 
-#include "ofxDelaunay.h"
+#pragma once
 
-void ofxDelaunay::reset(){
-    vertices.clear();
-    triangles.clear();
-	triangleMesh.clear();
-}
+#include "ofMain.h"
+#include "Delaunay.h"
 
-int ofxDelaunay::addPoint( const ofPoint& point ){
-	return addPoint( point.x, point.y, point.z );
-}
-
-int ofxDelaunay::addPoint( float x, float y, float z ){
-    XYZ v;
-    v.x = x;
-    v.y = y;
-    v.z = z;
-    vertices.push_back(v);
-	return vertices.size();
-}
-
-int ofxDelaunay::addPoints( vector<ofPoint>& points ){
-	for(int i = 0; i < points.size(); i++){
-        addPoint( points[i] );
-    }
-    return vertices.size();
-}
-
-int ofxDelaunay::triangulate(){
+class ofxDelaunay {
     
-    if(vertices.size() < 3){
-        return NULL;
-    }
+public:
     
-    int nv = vertices.size();
-    //add 3 emptly slots, required by the Triangulate call
-    vertices.push_back(XYZ());
-    vertices.push_back(XYZ());
-    vertices.push_back(XYZ());
-    
-    //allocate space for triangle indices
-    triangles.resize(3*nv);
-    
-	int ntri;
-	qsort( &vertices[0], vertices.size()-3, sizeof( XYZ ), XYZCompare );
-	Triangulate( nv, &vertices[0], &triangles[0], ntri );
+	void reset();
 	
-	// copy triangle data to ofxDelaunayTriangle.
-	triangleMesh.clear();
-    
-    //copy vertices
-	for (int i = 0; i < nv; i++){
-        triangleMesh.addVertex(ofVec3f(vertices[i].x,vertices[i].y,vertices[i].z));
-    }
-    
-    //copy triagles
-	for(int i = 0; i < ntri; i++){
-		triangleMesh.addIndex(triangles[ i ].p1);
-		triangleMesh.addIndex(triangles[ i ].p2);
-		triangleMesh.addIndex(triangles[ i ].p3);
-	}
+	int addPoint( const ofPoint& point );
+	int addPoint( float x, float y, float z);
+	int addPoints( vector<ofPoint>& points );
 	
-    //erase the last three triangles
-    vertices.erase(vertices.end()-1);
-    vertices.erase(vertices.end()-1);
-    vertices.erase(vertices.end()-1);
-	return ntri;
-}
+	int triangulate();
+    int triangulate(vector<ofFloatColor> _fColors, float _width, float _height);
+    
+    void mathCentroidVertex(ITRIANGLE tri);
+	void draw();
+	
+    ofMesh triangleMesh;
+	
+private:
+    vector<ITRIANGLE> triangles;
+    vector<XYZ> vertices;
+    vector<ofFloatColor> color;
+    
+};
 
-void ofxDelaunay::draw(){
-	if(ofGetStyle().bFill){
-	    triangleMesh.draw();
-    }
-    else{
-    	triangleMesh.drawWireframe();    
-    }
-}
+
