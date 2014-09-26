@@ -27,7 +27,10 @@ public:
 	int addPoint( float x, float y, float z);
 	int addPoints( vector<ofPoint>& points );
 	
-	int  triangulate();
+	int triangulate();
+    int triangulate(vector<ofFloatColor> _fColors, float _width, float _height);
+    
+    void mathCentroidVertex(ITRIANGLE tri);
 	void draw();
 	
     ofMesh triangleMesh;
@@ -35,7 +38,8 @@ public:
 private:
     vector<ITRIANGLE> triangles;
     vector<XYZ> vertices;
-	
+    vector<ofFloatColor> color;
+    
 };
 
 
