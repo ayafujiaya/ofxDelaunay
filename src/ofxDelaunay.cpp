@@ -117,12 +117,16 @@ int ofxDelaunay::triangulate(vector<ofFloatColor> _fColors, float _width, float 
     }
     
     //copy triagles
+    float limit = 0.1;
     
 	for(int i = 0; i < ntri; i++){
         float fColor = ofMap(i, 0, ntri, 0, 1.0);
-		triangleMesh.addIndex(triangles[ i ].p1);
-		triangleMesh.addIndex(triangles[ i ].p2);
-		triangleMesh.addIndex(triangles[ i ].p3);
+        
+
+        triangleMesh.addIndex(triangles[ i ].p1);
+        triangleMesh.addIndex(triangles[ i ].p2);
+        triangleMesh.addIndex(triangles[ i ].p3);
+
 	}
     
     for(int i=0; i < triangleMesh.getNumVertices();i++) {
@@ -136,6 +140,7 @@ int ofxDelaunay::triangulate(vector<ofFloatColor> _fColors, float _width, float 
         ofVec3f v3 = triangleMesh.getVertex(triangleMesh.getIndex(i*3+2));
         ofVec3f vCenter = (v1 + v2 + v3) / 3.0;
         
+        
         vCenter.x = ofClamp(vCenter.x, 0, _width);
         vCenter.y = ofClamp(vCenter.y, 0, _height);
         
@@ -145,6 +150,7 @@ int ofxDelaunay::triangulate(vector<ofFloatColor> _fColors, float _width, float 
         triCenter.push_back(point);
         
         ofColor c = _fColors[v1.x + _width * v1.y];
+        //cout << "v1 : " << v1 << ", v2 : " << v2 << ", v3 : " << v3 << ", vCenter : " << vCenter << ", c : " << c << endl;;
         
         triangleMesh.setColor(triangleMesh.getIndex(i*3),c);
         triangleMesh.setColor(triangleMesh.getIndex(i*3+1),c);
@@ -157,6 +163,10 @@ int ofxDelaunay::triangulate(vector<ofFloatColor> _fColors, float _width, float 
     vertices.erase(vertices.end()-1);
     vertices.erase(vertices.end()-1);
 	return ntri;
+}
+
+vector<ofPoint> ofxDelaunay::getTriCenters() {
+    return triCenter;
 }
 
 void ofxDelaunay::draw(){

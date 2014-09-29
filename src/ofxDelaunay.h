@@ -32,6 +32,8 @@ public:
     
     void mathCentroidVertex(ITRIANGLE tri);
 	void draw();
+    
+    vector<ofPoint> getTriCenters();
 	
     ofMesh triangleMesh;
 	
